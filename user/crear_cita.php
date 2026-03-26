@@ -2,7 +2,7 @@
 session_start();
 include("../includes/db.php");
 
-// Verificar si el usuario está logueado
+// aqui verificamos si el usuario esta logueado
 if (!isset($_SESSION["usuario"])) {
     header("Location: ../login.php");
     exit();
@@ -14,8 +14,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha = $_POST["fecha"];
     $hora = $_POST["hora"];
     $motivo = $_POST["motivo"];
+    $id_usuario = $_SESSION["id"];
 
-    // Evitar citas duplicadas
+    // Esto evitas las citas duplicadas
     $verificar = "SELECT * FROM citas WHERE fecha='$fecha' AND hora='$hora'";
     $resultado = $conexion->query($verificar);
 
@@ -23,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Ya existe una cita en esa fecha y hora";
     } else {
 
-        $sql = "INSERT INTO citas (nombre_paciente, fecha, hora, motivo) 
-                VALUES ('$nombre', '$fecha', '$hora', '$motivo')";
+        $sql = "INSERT INTO citas (id_usuario, nombre_paciente, fecha, hora, motivo) 
+        VALUES ('$id_usuario', '$nombre', '$fecha', '$hora', '$motivo')";
 
         if ($conexion->query($sql) === TRUE) {
             echo "Cita creada correctamente";

@@ -15,16 +15,17 @@ $correo = $_POST["correo"];
 
         $usuario = $resultado->fetch_assoc();
 
-        // Verificar contraseña
+        // Verificar la clave
         if (password_verify($password, $usuario["password"])) {
 
             // Guardar sesión
             $_SESSION["usuario"] = $usuario["nombre"];
             $_SESSION["rol"] = $usuario["rol"];
+            $_SESSION["id"] = $usuario["id"];
 
             echo "Login exitoso";
 
-            // Redirigir según rol
+            // Redirigir segun roles
             if ($usuario["rol"] == "admin") {
                 header("Location: admin/dashboard.php");
             } else {

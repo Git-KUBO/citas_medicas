@@ -1,22 +1,16 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-session_start();
-include("../includes/db.php");
-
-<?php
 session_start();
 include("../includes/db.php");
 
 // Verificar sesión
 if (!isset($_SESSION["usuario"])) {
     header("Location: ../login.php");
-    exit();
+exit();
 }
 
 // Obtener citas
-$sql = "SELECT * FROM citas";
+$id_usuario = $_SESSION["id"];
+$sql = "SELECT * FROM citas WHERE id_usuario = '$id_usuario'";
 $resultado = $conexion->query($sql);
 ?>
 <!DOCTYPE html>
