@@ -7,10 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $correo = $_POST["correo"];
     $password = $_POST["password"];
 
-    // encriptado de clave
+    // encriptado de la clave
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO usuarios (nombre, correo, password) 
+    $sql = "INSERT INTO usuarios (nombre, email, password) 
             VALUES ('$nombre', '$correo', '$passwordHash')";
     if ($conexion->query($sql) === TRUE) {
         echo "Registro exitoso";
