@@ -24,8 +24,21 @@ $resultado = $conexion->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver citas</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <table class="table table-bordered">
+
 </head>
+
 <body>
+
+<div style="margin-bottom:20px;">
+    <a href="crear_cita.php">Crear Cita</a> |
+    <a href="ver_citas.php">Ver Citas</a> |
+    <a href="../logout.php">Cerrar sesión</a>
+</div>
+
 <h2>Lista de Citas</h2>
 
 <table border="1">

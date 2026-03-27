@@ -45,6 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
+<div style="margin-bottom:20px;">
+    <a href="crear_cita.php">Crear Cita</a> |
+    <a href="ver_citas.php">Ver Citas</a> |
+    <a href="../logout.php">Cerrar sesión</a>
+</div>
+
 <h2>crear citas medicas</h2>
 
 <form method="POST">
