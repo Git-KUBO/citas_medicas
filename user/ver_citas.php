@@ -2,15 +2,20 @@
 session_start();
 include("../includes/db.php");
 
-// Verificar sesión
+// Verificar sesion
 if (!isset($_SESSION["usuario"])) {
     header("Location: ../login.php");
-exit();
+    exit();
 }
 
-// Obtener citas
-$id_usuario = $_SESSION["id"];
-$sql = "SELECT * FROM citas WHERE id_usuario = '$id_usuario'";
+// Obtener citas segun rol del usuario
+if ($_SESSION["rol"] == "admin") {
+    $sql = "SELECT * FROM citas";
+} else {
+    $id_usuario = $_SESSION["id"];
+    $sql = "SELECT * FROM citas WHERE id_usuario = '$id_usuario'";
+}
+
 $resultado = $conexion->query($sql);
 ?>
 <!DOCTYPE html>
@@ -29,15 +34,23 @@ $resultado = $conexion->query($sql);
         <th>Fecha</th>
         <th>Hora</th>
         <th>Motivo</th>
+        <th>Acciones</th>
     </tr>
 
     <?php while ($fila = $resultado->fetch_assoc()) { ?>
         <tr>
-            <td><?php echo $fila["nombre_paciente"]; ?></td>
-            <td><?php echo $fila["fecha"]; ?></td>
-            <td><?php echo $fila["hora"]; ?></td>
-            <td><?php echo $fila["motivo"]; ?></td>
-        </tr>
+    <td><?php echo $fila["nombre_paciente"]; ?></td>
+    <td><?php echo $fila["fecha"]; ?></td>
+    <td><?php echo $fila["hora"]; ?></td>
+    <td><?php echo $fila["motivo"]; ?></td>
+    <td>
+        <a href="editar_cita.php?id=<?php echo $fila["id"]; ?>">Editar</a>
+        <a href="eliminar_cita.php?id=<?php echo $fila["id"]; ?>" 
+        onclick="return confirm('¿Seguro que quieres eliminar esta cita?');">
+        Eliminar
+        </a>
+    </td>
+</tr>
     <?php } ?>
 
 </table>
