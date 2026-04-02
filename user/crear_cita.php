@@ -1,67 +1,64 @@
 <?php
 session_start();
-include("../includes/db.php");
-
-// aqui verificamos si el usuario esta logueado
-if (!isset($_SESSION["usuario"])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['rol'] != 'paciente') {
     header("Location: ../login.php");
     exit();
 }
+require '../includes/db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_usuario = $_SESSION['user_id'];
+    $fecha = $_POST['fecha'];
+    $hora = $_POST['hora'];
+    $especialidad = $_POST['especialidad'];
 
-    $nombre = $_POST["nombre"];
-    $fecha = $_POST["fecha"];
-    $hora = $_POST["hora"];
-    $motivo = $_POST["motivo"];
-    $id_usuario = $_SESSION["id"];
-
-    // Esto evitas las citas duplicadas
-    $verificar = "SELECT * FROM citas WHERE fecha='$fecha' AND hora='$hora'";
-    $resultado = $conexion->query($verificar);
-
-    if ($resultado->num_rows > 0) {
-        echo "Ya existe una cita en esa fecha y hora";
+    $sql = "INSERT INTO citas (id_usuario, fecha, hora, especialidad) VALUES ('$id_usuario', '$fecha', '$hora', '$especialidad')";
+    
+    if ($conn->query($sql) === TRUE) {
+        $mensaje = "Cita agendada correctamente.";
     } else {
-
-        $sql = "INSERT INTO citas (id_usuario, nombre_paciente, fecha, hora, motivo) 
-        VALUES ('$id_usuario', '$nombre', '$fecha', '$hora', '$motivo')";
-
-        if ($conexion->query($sql) === TRUE) {
-            echo "Cita creada correctamente";
-        } else {
-            echo "Error: " . $conexion->error;
-        }
+        $error = "Error al agendar: " . $conn->error;
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CREAR CITA</title>
+    <title>Agendar Cita</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-
-<div style="margin-bottom:20px;">
-    <a href="crear_cita.php">Crear Cita</a> |
-    <a href="ver_citas.php">Ver Citas</a> |
-    <a href="../logout.php">Cerrar sesión</a>
-</div>
-
-<h2>crear citas medicas</h2>
-
-<form method="POST">
-    <input type="text" name="nombre" placeholder="Nombre del paciente" required><br><br>
-    <input type="date" name="fecha" required><br><br>
-    <input type="time" name="hora" required><br><br>
-    <textarea name="motivo" placeholder="Motivo de la consulta" required></textarea><br><br>
-
-    <button type="submit">Crear Cita</button>
-</form>
-
+    <div class="container">
+        <h2>Agendar Nueva Cita</h2>
+        <nav>
+            <a href="dashboard.php">Volver al Dashboard</a> | 
+            <a href="../logout.php">Cerrar Sesión</a>
+        </nav>
+        <br>
+        <?php 
+            if(isset($mensaje)) echo "<p style='color:green;'>$mensaje</p>";
+            if(isset($error)) echo "<p style='color:red;'>$error</p>"; 
+        ?>
+        <form method="POST" action="">
+            <label>Fecha:</label>
+            <input type="date" name="fecha" required min="<?php echo date('Y-m-d'); ?>">
+            
+            <label>Hora:</label>
+            <input type="time" name="hora" required>
+            
+            <label>Especialidad:</label>
+            <select name="especialidad" required>
+                <option value="Medicina General">Medicina General</option>
+                <option value="Pediatría">Pediatría</option>
+                <option value="Ginecología">Ginecología</option>
+                <option value="Cardiología">Cardiología</option>
+            </select>
+            
+            <button type="submit">Agendar</button>
+        </form>
+    </div>
+    <script src="../js/index.js"></script>
     
 </body>
 </html>

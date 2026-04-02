@@ -1,71 +1,89 @@
 <?php
 session_start();
-include("../includes/db.php");
-
-// Verificar sesion
-if (!isset($_SESSION["usuario"])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['rol'] != 'paciente') {
     header("Location: ../login.php");
     exit();
 }
+require '../includes/db.php';
 
-// Obtener citas segun rol del usuario
-if ($_SESSION["rol"] == "admin") {
-    $sql = "SELECT * FROM citas";
-} else {
-    $id_usuario = $_SESSION["id"];
-    $sql = "SELECT * FROM citas WHERE id_usuario = '$id_usuario'";
-}
-
-$resultado = $conexion->query($sql);
+$id_usuario = $_SESSION['user_id'];
+$sql = "SELECT id, fecha, hora, especialidad, estado FROM citas WHERE id_usuario = '$id_usuario' ORDER BY fecha DESC, hora DESC";
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver citas</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <table class="table table-bordered">
-
+    <title>Mis Citas</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .btn-edit { color: #007BFF; text-decoration: none; margin-right: 10px; }
+        .btn-delete { color: #dc3545; text-decoration: none; }
+    </style>
 </head>
-
 <body>
+    <div class="container" style="max-width: 800px;">
+        <h2>Mis Citas Médicas</h2>
+        <nav>
+            <a href="dashboard.php">Volver al Dashboard</a> | 
+            <a href="crear_cita.php">Agendar Nueva Cita</a> |
+            <a href="../logout.php">Cerrar Sesión</a>
+        </nav>
+        <?php if(isset($_SESSION['mensaje_exito'])): ?>
+            <div class="alerta alerta-exito" style="margin-top: 15px;">
+                <strong> ¡Listo!</strong> <?php echo $_SESSION['mensaje_exito']; ?>
+            </div>
+            <?php unset($_SESSION['mensaje_exito']); // Borramos el mensaje para que no salga al recargar ?>
+        <?php endif; ?>
 
-<div style="margin-bottom:20px;">
-    <a href="crear_cita.php">Crear Cita</a> |
-    <a href="ver_citas.php">Ver Citas</a> |
-    <a href="../logout.php">Cerrar sesión</a>
-</div>
+       <?php if(isset($_SESSION['mensaje_exito'])): ?>
+            <div class="alerta alerta-exito" style="margin-top: 15px;">
+                <strong> ¡Listo!</strong> <?php echo $_SESSION['mensaje_exito']; ?>
+            </div>
+            <?php unset($_SESSION['mensaje_exito']); ?>
+        <?php endif; ?>
 
-<h2>Lista de Citas</h2>
+        <div class="citas-grid">
+            <?php if ($result->num_rows > 0): ?>
+                <?php while($row = $result->fetch_assoc()): ?>
+                    <div class="cita-card">
+                        
+                        <div class="cita-header">
+                            <span class="cita-fecha"> <?php echo date("d/m/Y", strtotime($row['fecha'])); ?></span>
+                            <span class="cita-hora"> <?php echo date("h:i A", strtotime($row['hora'])); ?></span>
+                        </div>
+                        
+                        <div class="cita-body">
+                            <p><strong>Especialidad:</strong> <?php echo htmlspecialchars($row['especialidad']); ?></p>
+                            <p><strong>Estado:</strong> 
+                                <span class="badge <?php echo $row['estado']; ?>">
+                                    <?php echo ucfirst($row['estado']); ?>
+                                </span>
+                            </p>
+                        </div>
+                        
+                        <div class="cita-actions">
+                            <?php if($row['estado'] == 'pendiente'): ?>
+                                <a href="editar_cita.php?id=<?php echo $row['id']; ?>" class="btn-edit">Editar</a>
+                                <a href="eliminar_cita.php?id=<?php echo $row['id']; ?>" class="btn-delete">Cancelar</a>
+                            <?php else: ?>
+                                <span style="flex: 1; text-align: center; padding: 8px; color: #aaa; background: #f4f4f4; border-radius: 5px; font-size: 0.9rem;">No modificable</span>
+                            <?php endif; ?>
+                        </div>
+                        
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: 8px; color: #666;">
+                    No tienes citas agendadas en este momento.
+                </div>
+            <?php endif; ?>
+        </div>
 
-<table border="1">
-    <tr>
-        <th>Paciente</th>
-        <th>Fecha</th>
-        <th>Hora</th>
-        <th>Motivo</th>
-        <th>Acciones</th>
-    </tr>
-
-    <?php while ($fila = $resultado->fetch_assoc()) { ?>
-        <tr>
-    <td><?php echo $fila["nombre_paciente"]; ?></td>
-    <td><?php echo $fila["fecha"]; ?></td>
-    <td><?php echo $fila["hora"]; ?></td>
-    <td><?php echo $fila["motivo"]; ?></td>
-    <td>
-        <a href="editar_cita.php?id=<?php echo $fila["id"]; ?>">Editar</a>
-        <a href="eliminar_cita.php?id=<?php echo $fila["id"]; ?>" 
-        onclick="return confirm('¿Seguro que quieres eliminar esta cita?');">
-        Eliminar
-        </a>
-    </td>
-</tr>
-    <?php } ?>
-
-</table>
+    </div>
+    <script src="../js/index.js"></script>
 </body>
 </html>

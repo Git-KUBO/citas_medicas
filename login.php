@@ -1,65 +1,59 @@
 <?php
 session_start();
-include("includes/db.php");
+require 'includes/db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-$correo = $_POST["correo"];
-    $password = $_POST["password"];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-    // Buscar usuario
-    $sql = "SELECT * FROM usuarios WHERE email = '$correo'";
-    $resultado = $conexion->query($sql);
+    $sql = "SELECT id, nombre, password, rol FROM usuarios WHERE email = '$email'";
+    $result = $conn->query($sql);
 
-    if ($resultado->num_rows > 0) {
-
-        $usuario = $resultado->fetch_assoc();
-
-        // Verificar la clave
-        if (password_verify($password, $usuario["password"])) {
-
-            // Guardar sesión
-            $_SESSION["usuario"] = $usuario["nombre"];
-            $_SESSION["rol"] = $usuario["rol"];
-            $_SESSION["id"] = $usuario["id"];
-
-            echo "Login exitoso";
-
-            // Redirigir segun roles
-            if ($usuario["rol"] == "admin") {
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['password'])) {
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['nombre'] = $row['nombre'];
+            $_SESSION['rol'] = $row['rol'];
+            
+            if ($row['rol'] == 'admin') {
                 header("Location: admin/dashboard.php");
             } else {
                 header("Location: user/dashboard.php");
             }
-
+            exit();
         } else {
-            echo "Contraseña incorrecta";
+            $error = "Contraseña incorrecta.";
         }
-
     } else {
-        echo "Usuario no encontrado";
+        $error = "El usuario no existe.";
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOGIN</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<h2>Iniciar Sesión</h2>
-
-<form method="POST">
-    <input type="email" name="correo" placeholder="Correo" required><br><br>
-    <input type="password" name="password" placeholder="Contraseña" required><br><br>
-
-    <button type="submit">Entrar</button>
-</form>
-
+    <div class="container">
+        <h2>Iniciar Sesión</h2>
+<?php if(isset($error)): ?>
+    <div class="alerta alerta-error">
+        <strong> Error:</strong> <?php echo $error; ?>
+    </div>
+<?php endif; ?>
+        <form method="POST" action="">
+            <label>Correo Electrónico:</label>
+            <input type="email" name="email" required>
+            <label>Contraseña:</label>
+            <input type="password" name="password" required>
+            <button type="submit">Ingresar</button>
+        </form>
+        <p>¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
+    </div>
     
 </body>
 </html>

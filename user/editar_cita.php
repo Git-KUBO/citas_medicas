@@ -1,62 +1,80 @@
 <?php
 session_start();
-include("../includes/db.php");
-
-// Verificar sesion
-if (!isset($_SESSION["usuario"])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['rol'] != 'paciente') {
     header("Location: ../login.php");
     exit();
 }
+require '../includes/db.php';
 
-// Obtener ID
-$id = $_GET["id"];
+$id_usuario = $_SESSION['user_id'];
+$id_cita = $_GET['id'] ?? null;
 
-// Obtener datos 
-$sql = "SELECT * FROM citas WHERE id = '$id'";
-$resultado = $conexion->query($sql);
-$cita = $resultado->fetch_assoc();
+if (!$id_cita) {
+    header("Location: ver_citas.php");
+    exit();
+}
 
-// ACTUALIZAR
+// Obtener datos actuales de la cita
+$sql_cita = "SELECT * FROM citas WHERE id = '$id_cita' AND id_usuario = '$id_usuario' AND estado = 'pendiente'";
+$result_cita = $conn->query($sql_cita);
+
+if ($result_cita->num_rows == 0) {
+    die("Cita no encontrada o ya no puede ser modificada.");
+}
+$cita = $result_cita->fetch_assoc();
+
+// Procesar la actualización
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $fecha = $_POST['fecha'];
+    $hora = $_POST['hora'];
+    $especialidad = $_POST['especialidad'];
 
-    $nombre = $_POST["nombre"];
-    $fecha = $_POST["fecha"];
-    $hora = $_POST["hora"];
-    $motivo = $_POST["motivo"];
-
-    $update = "UPDATE citas SET 
-        nombre_paciente='$nombre',
-        fecha='$fecha',
-        hora='$hora',
-        motivo='$motivo'
-        WHERE id='$id'";
-
-    if ($conexion->query($update)) {
+    $sql_update = "UPDATE citas SET fecha = '$fecha', hora = '$hora', especialidad = '$especialidad' 
+                   WHERE id = '$id_cita' AND id_usuario = '$id_usuario'";
+    
+    if ($conn->query($sql_update) === TRUE) {
+        $_SESSION['mensaje_exito'] = "La cita fue actualizada con éxito.";
         header("Location: ver_citas.php");
         exit();
     } else {
-        echo "Error: " . $conexion->error;
+        $error = "Error al actualizar: " . $conn->error;
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Editar Cita</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <h2>Editar Cita</h2>
-
-<form method="POST">
-    <input type="text" name="nombre" value="<?php echo $cita["nombre_paciente"]; ?>" required><br><br>
-    <input type="date" name="fecha" value="<?php echo $cita["fecha"]; ?>" required><br><br>
-    <input type="time" name="hora" value="<?php echo $cita["hora"]; ?>" required><br><br>
-    <textarea name="motivo" required><?php echo $cita["motivo"]; ?></textarea><br><br>
-
-    <button type="submit">Actualizar</button>
-</form>
+    <div class="container">
+        <h2>Modificar Cita</h2>
+<?php if(isset($error)): ?>
+            <div class="alerta alerta-error">
+                <strong> Error:</strong> <?php echo $error; ?>
+            </div>
+        <?php endif; ?>        
+        <form method="POST" action="">
+            <label>Fecha:</label>
+            <input type="date" name="fecha" value="<?php echo $cita['fecha']; ?>" required min="<?php echo date('Y-m-d'); ?>">
+            
+            <label>Hora:</label>
+            <input type="time" name="hora" value="<?php echo $cita['hora']; ?>" required>
+            
+            <label>Especialidad:</label>
+            <select name="especialidad" required>
+                <option value="Medicina General" <?php if($cita['especialidad'] == 'Medicina General') echo 'selected'; ?>>Medicina General</option>
+                <option value="Pediatría" <?php if($cita['especialidad'] == 'Pediatría') echo 'selected'; ?>>Pediatría</option>
+                <option value="Ginecología" <?php if($cita['especialidad'] == 'Ginecología') echo 'selected'; ?>>Ginecología</option>
+                <option value="Cardiología" <?php if($cita['especialidad'] == 'Cardiología') echo 'selected'; ?>>Cardiología</option>
+            </select>
+            
+            <button type="submit">Actualizar Cita</button>
+            <a href="ver_citas.php" style="text-align: center; display: block; margin-top: 10px;">Cancelar</a>
+        </form>
+    </div>
+    <script src="../js/index.js"></script>
 </body>
 </html>
