@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (diaSemana === 0 || diaSemana === 6) {
                 event.preventDefault(); 
-                mostrarAlertaJS('No laboramos los fines de semana. Selecciona de Lunes a Viernes.', 'advertencia');
+                mostrarAlertaJS('No laboramos los fines de semana. Selecciona un día de Lunes a Viernes.', 'advertencia');
                 return;
             }
 

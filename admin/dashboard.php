@@ -32,7 +32,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     }
 }
 
-// Consultar TODAS las citas con el nombre del paciente
+// Consultar todas las citas con el nombre del paciente
 $sql = "SELECT c.id, c.fecha, c.hora, c.especialidad, c.estado, u.nombre AS paciente 
         FROM citas c 
         INNER JOIN usuarios u ON c.id_usuario = u.id 
@@ -75,13 +75,13 @@ $result = $conn->query($sql);
 
         <?php if(isset($error)): ?>
             <div class="alerta alerta-error">
-                <strong>❌ Error:</strong> <?php echo $error; ?>
+                <strong> Error:</strong> <?php echo $error; ?>
             </div>
         <?php endif; ?>
 
         <?php if(isset($_SESSION['mensaje_exito'])): ?>
             <div class="alerta alerta-exito">
-                <strong>✅ ¡Listo!</strong> <?php echo $_SESSION['mensaje_exito']; ?>
+                <strong> ¡Listo!</strong> <?php echo $_SESSION['mensaje_exito']; ?>
             </div>
             <?php unset($_SESSION['mensaje_exito']); ?>
         <?php endif; ?>
@@ -92,13 +92,13 @@ $result = $conn->query($sql);
                     <div class="cita-card">
                         
                         <div class="cita-header">
-                            <span class="cita-fecha">📅 <?php echo date("d/m/Y", strtotime($row['fecha'])); ?></span>
-                            <span class="cita-hora">🕒 <?php echo date("h:i A", strtotime($row['hora'])); ?></span>
+                            <span class="cita-fecha"> <?php echo date("d/m/Y", strtotime($row['fecha'])); ?></span>
+                            <span class="cita-hora"> <?php echo date("h:i A", strtotime($row['hora'])); ?></span>
                         </div>
                         
                         <div class="cita-body">
                             <div class="paciente-nombre">
-                                <strong>👤 Paciente:</strong> <br>
+                                <strong> Paciente:</strong> <br>
                                 <?php echo htmlspecialchars($row['paciente']); ?>
                             </div>
                             

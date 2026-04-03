@@ -1,181 +1,213 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovaCare | Tu Salud en Buenas Manos</title>
-    <link rel="stylesheet" href="/css/style.css">
-<style>
-    /* =========================================
-   Estilos de la Landing Page (index.php)
-   ========================================= */
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style/index.css">
+    <style>
+        /* =========================================
+           Estilos Optimizados
+           ========================================= */
 
-   .body{
-    font-family: 'Inter', sans-serif;
-   }
-body.landing-page {
-    display: block; /* Sobrescribe el display: flex del body original */
-    padding: 0;
-    background-color: #f8f9fa;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            color: #333;
+            line-height: 1.6;
+        }
 
-/* Navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 50px;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
+        body.landing-page {
+            background-color: #f8f9fa;
+        }
 
-.navbar .logo h1 {
-    margin: 0;
-    color: #007BFF;
-    font-size: 1.5rem;
-}
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-/* Botones genéricos */
-.btn-outline {
-    border: 2px solid #007BFF;
-    color: #007BFF;
-    padding: 8px 16px;
-    border-radius: 5px;
-    font-weight: bold;
-    margin-right: 10px;
-    transition: 0.3s;
-}
+        .navbar .logo h1 {
+            margin: 0;
+            color: #007BFF;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.btn-outline:hover {
-    background-color: #007BFF;
-    color: white;
-}
+        .nav-links a {
+            text-decoration: none;
+            transition: 0.3s;
+        }
 
-.btn-primary {
-    background-color: #007BFF;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: 0.3s;
-}
+        /* Botones */
+        .btn-outline {
+            border: 2px solid #007BFF;
+            color: #007BFF;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-}
+        .btn-outline:hover {
+            background-color: #007BFF;
+            color: white;
+        }
 
-/* Hero Section */
-.hero {
-    height: 300px;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-                url('https://media.istockphoto.com/id/1428114896/es/foto/pasillo-vac%C3%ADo-en-el-hospital-moderno-con-%C3%A1rea-de-espera-y-cama-de-hospital-en-las-habitaciones.jpg?s=612x612&w=0&k=20&c=KsP_Kh10ddRqhp0_R55o8CcM-0Fn0JkGO9GUZ33MNg8=') no-repeat center center/cover;
-    text-align: center;
-    padding: 100px 20px;
-}
+        .btn-primary {
+            background-color: #007BFF;
+            color: white !important;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
 
-.hero-content {
-    max-width: 700px;
-    margin: 0 auto;
-}
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
 
-.hero h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: white;
-}
+        /* Hero Section  */
+        .hero {
+            height: 80vh; 
+            min-height: 500px;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                        url('img/hero-bg.png') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
 
-.hero p {
-    font-size: 1.2rem;
-    margin-bottom: 40px;
-    line-height: 1.6;
-}
+        .hero-content {
+            max-width: 800px;
+        }
 
-.hero-btn {
-    font-size: 1.2rem;
-    padding: 15px 30px;
-}
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
 
-/* Features */
-.features {
-    display: flex;
-    justify-content: space-around;
-    padding: 60px 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-    gap: 20px;
-}
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 35px;
+            opacity: 0.9;
+        }
 
-.feature-box {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    text-align: center;
-    flex: 1;
-}
+        .hero-btn {
+            font-size: 1.1rem;
+            padding: 15px 40px;
+            text-decoration: none;
+            display: inline-block;
+        }
 
-.feature-box h3 {
-    color: #333;
-    margin-bottom: 15px;
-}
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.feature-box p {
-    color: #666;
-    line-height: 1.5;
-}
+        .feature-box {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
 
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #343a40;
-    color: white;
-    margin-top: auto;
-}
-</style>
+        .feature-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-box h3 {
+            color: #007BFF;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #212529;
+            color: #adb5bd;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 { font-size: 2rem; }
+            .navbar { padding: 15px 20px; }
+            .nav-links { display: flex; flex-direction: column; gap: 10px; }
+        }
+    </style>
 </head>
 <body class="landing-page">
 
     <header class="navbar">
         <div class="logo">
-            <h1>⚕️ NovaCare</h1>
+            <h1>NovaCare</h1>
         </div>
-        <nav>
+        <nav class="nav-links">
             <a href="login.php" class="btn-outline">Iniciar Sesión</a>
             <a href="registro.php" class="btn-primary">Registrarse</a>
         </nav>
     </header>
 
-    <main class="hero">
-        <div class="hero-content">
-            <h2>Gestiona tus citas médicas de forma rápida y segura</h2>
-            <p>En NovaCare, tu bienestar es nuestra prioridad. Regístrate en nuestro portal de pacientes para agendar, consultar o cancelar tus citas médicas desde la comodidad de tu hogar.</p>
-            <div class="hero-buttons">
-                <a href="registro.php" class="btn-primary hero-btn">Agendar mi primera cita</a>
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Tu salud no espera, <br>agenda hoy mismo</h2>
+                <p>Gestiona tus citas médicas de forma rápida, segura y desde cualquier dispositivo. El control de tu bienestar en un solo lugar.</p>
+                <div class="hero-buttons">
+                    <a href="registro.php" class="btn-primary hero-btn">Comenzar ahora</a>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-box">
+                <h3>Ahorra Tiempo</h3>
+                <p>Agenda en menos de 2 minutos. Sin esperas telefónicas ni traslados innecesarios para un simple turno.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Especialistas</h3>
+                <p>Accede a una amplia red de profesionales certificados en diversas áreas de la salud.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Control Total</h3>
+                <p>Historial completo, recordatorios automáticos y la posibilidad de reprogramar con un solo clic.</p>
+            </div>
+        </section>
     </main>
 
-    <section class="features">
-        <div class="feature-box">
-            <h3> Ahorra Tiempo</h3>
-            <p>Olvídate de las largas filas y llamadas en espera. Agenda en menos de 2 minutos.</p>
-        </div>
-        <div class="feature-box">
-            <h3>Especialistas</h3>
-            <p>Contamos con un equipo médico altamente capacitado en múltiples áreas.</p>
-        </div>
-        <div class="feature-box">
-            <h3>Control Total</h3>
-            <p>Revisa tu historial de citas y reprograma o cancela cuando lo necesites.</p>
-        </div>
-    </section>
-
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> NovaCare. Todos los derechos reservados.</p>
+        <p>&copy; <?php echo date("Y"); ?> NovaCare | Sistema de Gestión de Salud</p>
     </footer>
 
+    <script src="/js/index.js"></script>
 </body>
 </html>

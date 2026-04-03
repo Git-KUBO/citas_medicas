@@ -28,7 +28,7 @@ $result = $conn->query($sql);
     <div class="container" style="max-width: 800px;">
         <h2>Mis Citas Médicas</h2>
         <nav>
-            <a href="dashboard.php">Volver al Dashboard</a> | 
+            <a href="dashboard.php">Inicio</a> | 
             <a href="crear_cita.php">Agendar Nueva Cita</a> |
             <a href="../logout.php">Cerrar Sesión</a>
         </nav>

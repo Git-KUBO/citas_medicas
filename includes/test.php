@@ -1,5 +1,4 @@
 <?php
-// Ocultamos advertencias menores, pero mostramos errores fatales
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 

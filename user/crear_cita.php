@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <h2>Agendar Nueva Cita</h2>
         <nav>
-            <a href="dashboard.php">Volver al Dashboard</a> | 
+            <a href="dashboard.php">Inicio</a> | 
             <a href="../logout.php">Cerrar Sesión</a>
         </nav>
         <br>
